@@ -1,0 +1,13 @@
+h1 Calendar
+
+h2 Appointments
+
+h3 Make a new appointment
+
+= simple_form_for @appointment do |f|
+  = f.input :title
+  = f.input :start_time
+  = f.submit "Make an appointment"
+
+#appointments
+  = render @appointments
