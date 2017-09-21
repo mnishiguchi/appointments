@@ -8,11 +8,10 @@ class AppointmentsController < ApplicationController
     @appointment = Appointment.new(appointment_params)
 
     if @appointment.save
-      flash[:notice] = "An appointment was successfully created"
-      redirect_to appointments_url
+      flash.now[:notice] = "An appointment was successfully created"
+      @appointments = Appointment.order(:start_time)
     else
       flash.now[:alert] = "Couldn't create an appointment"
-      render :index
     end
   end
 

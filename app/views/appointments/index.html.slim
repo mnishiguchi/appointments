@@ -4,7 +4,7 @@ h2 Appointments
 
 h3 Make a new appointment
 
-= simple_form_for @appointment do |f|
+= simple_form_for @appointment, remote: true do |f|
   = f.input :title
   = f.input :start_time
   = f.submit "Make an appointment"
