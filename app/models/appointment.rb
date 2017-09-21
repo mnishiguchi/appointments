@@ -10,5 +10,6 @@
 #
 
 class Appointment < ApplicationRecord
-  validates :title, presence: true
+  validates :title, presence: true, length: { minimum: 3 }
+  validates :start_time, timeliness: { on_or_after: :now, type: :date }
 end

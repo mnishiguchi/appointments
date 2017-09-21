@@ -1,0 +1,27 @@
+// Typography
+//
+// Headings, body text, lists, and other misc typographic elements.
+
+body {
+  font-family: $root-font-family;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: $heading-font-family;
+  font-weight: normal;
+  line-height: 1.25;
+  color: $heading-font-color;
+  text-rendering: optimizeLegibility;
+  margin-bottom: 0.5rem;
+}

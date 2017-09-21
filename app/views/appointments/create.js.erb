@@ -1,7 +1,0 @@
-document.querySelector('#flash').innerHTML
-  = '<%= escape_javascript(render "layouts/flash") %>';
-
-<% if @appointments %>
-  document.querySelector('#appointments').innerHTML
-    = '<%= escape_javascript(render partial: "appointment_list", locals: { appointments: @appointments }) %>';
-<% end %>

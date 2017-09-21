@@ -38,6 +38,7 @@ gem "simple_form"
 gem "slim-rails"
 gem "bootstrap", "~> 4.0.0.beta"
 gem "jquery-rails"
+gem "validates_timeliness", "~> 4.0"
 
 group :development, :test do
   gem "capybara", "~> 2.13"
@@ -50,6 +51,7 @@ group :development, :test do
   gem "pry-rails"
   gem "database_cleaner"
   gem "guard-rspec", require: false
+  gem "faker"
   # gem "coveralls", require: false
 end
 
@@ -60,10 +62,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
-
   gem "annotate"
-  gem "guard"
-  gem "guard-minitest"
   gem "rails-erd"
 end
 

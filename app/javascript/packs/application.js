@@ -13,6 +13,7 @@
 import WebpackerReact from 'webpacker-react'
 import AppointmentApp from './components/AppointmentApp'
 
+// Register your root components (those you want to load from your HTML) here.
 WebpackerReact.setup({
   AppointmentApp
 })

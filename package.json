@@ -7,14 +7,22 @@
   },
   "dependencies": {
     "@rails/webpacker": "^3.0.1",
+    "axios": "^0.16.2",
     "babel-preset-react": "^6.24.1",
+    "humps": "^2.0.1",
+    "moment": "^2.18.1",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
+    "react-datetime": "^2.10.1",
     "react-dom": "^15.6.1",
     "webpacker-react": "^0.3.2"
   },
   "devDependencies": {
-    "webpack-dev-server": "^2.8.2",
-    "yarn": "^1.0.2"
+    "eslint": "^4.7.2",
+    "eslint-config-shakacode": "^15.0.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.3.0",
+    "webpack-dev-server": "^2.8.2"
   }
 }

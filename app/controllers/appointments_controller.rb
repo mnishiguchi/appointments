@@ -6,12 +6,10 @@ class AppointmentsController < ApplicationController
 
   def create
     @appointment = Appointment.new(appointment_params)
-
     if @appointment.save
-      flash.now[:notice] = "An appointment was successfully created"
-      @appointments = Appointment.order(:start_time)
+      render json: @appointment
     else
-      flash.now[:alert] = "Couldn't create an appointment"
+      render json: @appointment.errors, status: :unprocessable_entity
     end
   end
 
