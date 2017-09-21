@@ -3,5 +3,5 @@ document.querySelector('#flash').innerHTML
 
 <% if @appointments %>
   document.querySelector('#appointments').innerHTML
-    = '<%= escape_javascript(render @appointments) %>';
+    = '<%= escape_javascript(render partial: "appointment_list", locals: { appointments: @appointments }) %>';
 <% end %>

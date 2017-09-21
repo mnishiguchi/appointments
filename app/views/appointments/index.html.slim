@@ -1,13 +1,12 @@
-h1 Calendar
+.jumbotron
+  h1 Appointments
 
-h2 Appointments
+  h2.h4 Make a new appointment
 
-h3 Make a new appointment
-
-= simple_form_for @appointment, remote: true do |f|
-  = f.input :title
-  = f.input :start_time
-  = f.submit "Make an appointment"
+  = simple_form_for @appointment, remote: true do |f|
+    = f.input :title
+    = f.input :start_time
+    = f.submit "Make an appointment"
 
 #appointments
-  = render @appointments
+  = render partial: "appointment_list", locals: { appointments: @appointments }

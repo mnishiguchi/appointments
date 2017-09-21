@@ -35,6 +35,8 @@ gem "jbuilder", "~> 2.5"
 # gem 'capistrano-rails', group: :development
 gem "simple_form"
 gem "slim-rails"
+gem "bootstrap", "~> 4.0.0.beta"
+gem "jquery-rails"
 
 group :development, :test do
   gem "capybara", "~> 2.13"
