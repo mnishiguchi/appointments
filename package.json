@@ -1,10 +1,20 @@
 {
   "name": "appointments",
   "private": true,
+  "engines": {
+    "node": "8.5.0",
+    "yarn": "1.0.2"
+  },
   "dependencies": {
-    "@rails/webpacker": "^3.0.1"
+    "@rails/webpacker": "^3.0.1",
+    "babel-preset-react": "^6.24.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "webpacker-react": "^0.3.2"
   },
   "devDependencies": {
-    "webpack-dev-server": "^2.8.2"
+    "webpack-dev-server": "^2.8.2",
+    "yarn": "^1.0.2"
   }
 }

@@ -7,4 +7,12 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-console.log('Hello World from Webpacker')
+// console.log('Hello World from Webpacker')
+
+// https://github.com/renchap/webpacker-react#usage
+import WebpackerReact from 'webpacker-react'
+import AppointmentApp from './components/AppointmentApp'
+
+WebpackerReact.setup({
+  AppointmentApp
+})
