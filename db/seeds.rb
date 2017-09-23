@@ -8,6 +8,6 @@
 3.times do
   Appointment.create!(
     title: Faker::Seinfeld.character,
-    start_time: Faker::Date.between(1.month.ago, 1.month.from_now)
+    start_time: Faker::Date.between(1.day.from_now, 1.month.from_now)
   )
 end

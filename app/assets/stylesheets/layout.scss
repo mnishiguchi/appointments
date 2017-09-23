@@ -45,6 +45,11 @@ abbr[title='required'] {
   outline: 0 none;
 }
 
+.btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
 .btn-primary {
   background: $blue-darker;
   color: #ffffff;

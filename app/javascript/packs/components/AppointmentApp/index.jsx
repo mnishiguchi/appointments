@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { EventEmitter } from 'fbemitter';
 import { getCsrfToken, underscoreKeys, camelizeKeys } from '../utils';
 import appointmentsPropType from '../types/appointmentsPropType';
@@ -10,13 +11,19 @@ import FormErrors from './FormErrors';
 class AppointmentApp extends React.PureComponent {
   // The form object keys and input element names must match the corresponding keys of the remote API.
   // - MN 2017-09-22
+
+  FORM_FIELD_NAMES = ['title', 'startTime'];
+
+  initialForm = {
+    title: { value: '', isValid: false },
+    startTime: { value: '', isValid: false },
+    formErrors: {},
+    isFormValid: false,
+  };
+
   state = {
     appointments: camelizeKeys(this.props.appointments) || [],
-    formObject: {
-      title: '',
-      startTime: '',
-    },
-    formErrors: {},
+    ...this.initialForm,
   };
 
   componentWillMount() {
@@ -32,18 +39,39 @@ class AppointmentApp extends React.PureComponent {
     this.emitter.removeAllListeners();
   }
 
-  updateFormObject = changeset => {
-    this.setState(prevState => ({
-      formObject: {
-        ...prevState.formObject,
-        ...changeset,
+  updateFormField = (name, value) => {
+    const isValid = this.validateFormField(name, value);
+    this.setState(
+      {
+        [name]: { ...this.state[name], value, isValid },
       },
-    }));
+      this.setIsFormValid(),
+    );
   };
 
-  submitForm = formObject => {
+  validateFormField = (name, value) => {
+    switch (name) {
+      case 'title':
+        return value.trim().length > 2;
+      case 'startTime':
+        return moment(value).isValid() && moment(value).isAfter();
+      default:
+        return false;
+    }
+  };
+
+  setIsFormValid = (formFieldNames = this.FORM_FIELD_NAMES) =>
+    this.setState({
+      isFormValid: formFieldNames.reduce((acc, name) => acc && this.state[name].isValid, true),
+    });
+
+  submitForm = () => {
+    const { title, startTime } = this.state;
     const params = {
-      appointment: underscoreKeys(formObject),
+      appointment: underscoreKeys({
+        title: title.value,
+        startTime: startTime.value,
+      }),
       authenticity_token: getCsrfToken(),
     };
     axios
@@ -59,14 +87,6 @@ class AppointmentApp extends React.PureComponent {
       });
   };
 
-  setFormErrors = formErrors => {
-    this.setState(prevState => ({ formErrors }));
-  };
-
-  clearFormErrors = formErrors => {
-    this.setState(prevState => ({ formErrors: {} }));
-  };
-
   addAppointment = appointment => {
     this.setState(prevState => {
       const appointments = [...prevState.appointments, camelizeKeys(appointment)].sort(
@@ -76,28 +96,41 @@ class AppointmentApp extends React.PureComponent {
     });
   };
 
+  setFormErrors = formErrors => {
+    this.setState({ formErrors });
+  };
+
+  clearFormErrors = () => {
+    this.setState({ ...this.initialForm });
+  };
+
+  clearFormValues = () => {
+    this.setState({ title });
+  };
+
   subscribeFormEvents() {
-    this.emitter.addListener('AppointmentForm:input:change', changeset => {
-      this.updateFormObject(changeset);
+    this.emitter.addListener('AppointmentForm:onChange', ({ name, value }) => {
+      this.updateFormField(name, value);
     });
 
-    this.emitter.addListener('AppointmentForm:startTime:change', changeset => {
-      this.updateFormObject(changeset);
-    });
-
-    this.emitter.addListener('AppointmentForm:submit', () => {
-      this.submitForm(this.state.formObject);
+    this.emitter.addListener('AppointmentForm:onSubmit', () => {
+      this.submitForm();
     });
   }
 
   render() {
-    const { appointments } = this.state;
+    const { appointments, title, startTime, formErrors, isFormValid } = this.state;
     return (
       <div className="AppointmentApp">
-        <FormErrors formErrors={this.state.formErrors} />
+        <FormErrors formErrors={formErrors} />
         <div className="row">
           <div className="col-lg-4">
-            <AppointmentForm formObject={this.state.formObject} emitter={this.emitter} />
+            <AppointmentForm
+              title={title}
+              startTime={startTime}
+              emitter={this.emitter}
+              isFormValid={isFormValid}
+            />
           </div>
           <div className="col-lg-8">
             <AppointmentList appointments={appointments} />
