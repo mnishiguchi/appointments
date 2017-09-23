@@ -5,35 +5,25 @@ import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
 class AppointmentForm extends React.PureComponent {
-  // State object keys and input element names must match the corresponding keys of the remote API.
-  // - MN 2017-09-22
-  state = {
-    title: '',
-    startTime: '',
-  };
+  handleInputChange = e =>
+    this.props.emitter.emit('AppointmentForm:input:change', {
+      [e.target.name]: e.target.value,
+    });
 
-  setFormValue = e => {
-    const { name, value } = e.target;
-    this.setState(() => ({ [name]: value }));
-  };
-
-  setStartTime = moment => {
+  handleDatetimeChange = moment => {
     const startTime = moment.toDate();
     if (startTime) {
-      this.setState(() => ({ startTime }));
+      this.props.emitter.emit('AppointmentForm:startTime:change', { startTime });
     }
   };
 
   handleFormSubmit = e => {
-    this.props.onSubmit(this.state);
+    this.props.emitter.emit('AppointmentForm:submit');
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log(this.state);
-  }
-
   render() {
-    const { title, startTime } = this.state;
+    const { emitter, formObject: { title, startTime } } = this.props;
+
     return (
       <form className="AppointmentForm form-inline" style={{ marginBottom: '1rem' }}>
         <div className="d-flex flex-column">
@@ -42,14 +32,14 @@ class AppointmentForm extends React.PureComponent {
             className="AppointmentForm__title form-control mb-2 mr-sm-2 mb-sm-0"
             placeholder="Title"
             name="title"
-            onChange={this.setFormValue}
+            onChange={this.handleInputChange}
           />
           <Datetime
             open
             input={false}
             inputProps={{ name: 'startTime' }}
-            value={this.state.startTime}
-            onChange={this.setStartTime}
+            value={startTime}
+            onChange={this.handleDatetimeChange}
           />
 
           <button type="button" className="btn btn-primary" onClick={this.handleFormSubmit}>
@@ -62,7 +52,8 @@ class AppointmentForm extends React.PureComponent {
 }
 
 AppointmentForm.propTypes = {
-  onSubmit: PropTypes.func,
+  formObject: PropTypes.any,
+  emitter: PropTypes.any,
 };
 
 export default AppointmentForm;
