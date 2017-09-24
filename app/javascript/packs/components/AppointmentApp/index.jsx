@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import moment from 'moment';
 import { EventEmitter } from 'fbemitter';
 import { getCsrfToken, underscoreKeys, camelizeKeys } from '../utils';
+import { validateMinLength, validateMaxLength, validateFutureTime } from '../validators';
 import appointmentsPropType from '../types/appointmentsPropType';
 import AppointmentForm from './AppointmentForm';
 import AppointmentList from './AppointmentList';
@@ -11,8 +11,12 @@ import FormErrors from './FormErrors';
 class AppointmentApp extends React.PureComponent {
   // The form object keys and input element names must match the corresponding keys of the remote API.
   // - MN 2017-09-22
+  static formFieldNames = ['title', 'startTime'];
 
-  FORM_FIELD_NAMES = ['title', 'startTime'];
+  static validators = {
+    title: [string => validateMinLength(string, 3), string => validateMaxLength(string, 10)],
+    startTime: [datetime => validateFutureTime(datetime)],
+  };
 
   initialForm = {
     title: { value: '', isValid: false },
@@ -40,30 +44,38 @@ class AppointmentApp extends React.PureComponent {
   }
 
   updateFormField = (name, value) => {
-    const isValid = this.validateFormField(name, value);
+    const errorMessages = this.validateInputField(name, value, AppointmentApp.validators[name]);
+    const isValid = errorMessages.length === 0;
+    const formErrors = { ...this.state.formErrors };
+    formErrors[name] = errorMessages;
+
     this.setState(
       {
         [name]: { ...this.state[name], value, isValid },
+        formErrors,
       },
       this.setIsFormValid(),
     );
   };
 
-  validateFormField = (name, value) => {
-    switch (name) {
-      case 'title':
-        return value.trim().length > 2;
-      case 'startTime':
-        return moment(value).isValid() && moment(value).isAfter();
-      default:
-        return false;
-    }
+  // Returns an array of error messages of client-side form validation.
+  validateInputField = (name, value, validators = []) => {
+    const errorMessages = validators.reduce((errors, validate) => {
+      const error = validate(value);
+      if (error) errors.push(error);
+      return errors;
+    }, []);
+    return errorMessages;
   };
 
-  setIsFormValid = (formFieldNames = this.FORM_FIELD_NAMES) =>
-    this.setState({
-      isFormValid: formFieldNames.reduce((acc, name) => acc && this.state[name].isValid, true),
-    });
+  setIsFormValid = (formFieldNames = AppointmentApp.formFieldNames) => {
+    const isFormValid = formFieldNames.reduce((acc, name) => {
+      const isFieldValid = this.state[name].isValid;
+      return acc && isFieldValid;
+    }, true);
+
+    this.setState({ isFormValid });
+  };
 
   submitForm = () => {
     const { title, startTime } = this.state;
@@ -79,11 +91,11 @@ class AppointmentApp extends React.PureComponent {
       .then(response => {
         const newAppointment = response.data;
         this.addAppointment(newAppointment);
-        this.clearFormErrors();
+        this.clearFormValues();
       })
       .catch(error => {
         const formErrors = error.response.data;
-        this.setFormErrors(formErrors);
+        this.setState({ formErrors });
       });
   };
 
@@ -96,16 +108,8 @@ class AppointmentApp extends React.PureComponent {
     });
   };
 
-  setFormErrors = formErrors => {
-    this.setState({ formErrors });
-  };
-
-  clearFormErrors = () => {
-    this.setState({ ...this.initialForm });
-  };
-
   clearFormValues = () => {
-    this.setState({ title });
+    this.setState({ ...this.initialForm });
   };
 
   subscribeFormEvents() {

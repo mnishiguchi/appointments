@@ -4,8 +4,10 @@ import { humanize } from '../utils';
 
 const FormErrors = ({ formErrors }) => {
   const fieldNames = Object.keys(formErrors);
+  const errorCount = fieldNames.reduce((acc, name) => acc + formErrors[name].length, 0);
+
   return (
-    fieldNames.length > 0 && (
+    errorCount > 0 && (
       <div className="alert alert-danger" role="alert">
         <ul style={{ marginBottom: '0' }}>
           {fieldNames.map(fieldName =>
@@ -17,6 +19,8 @@ const FormErrors = ({ formErrors }) => {
   );
 };
 
-FormErrors.propTypes = {};
+FormErrors.propTypes = {
+  formErrors: PropTypes.object,
+};
 
 export default FormErrors;
