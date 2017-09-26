@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { EventEmitter } from 'fbemitter';
+import { isoDatetimeStringPropType } from '../propTypes';
 import { getCsrfToken, underscoreKeys, camelizeKeys } from '../utils';
 import { validateMinLength, validateMaxLength, validateFutureTime } from '../validators';
-import appointmentsPropType from '../types/appointmentsPropType';
 import AppointmentForm from './AppointmentForm';
 import AppointmentList from './AppointmentList';
 import FormErrors from './FormErrors';
@@ -20,7 +21,7 @@ class AppointmentApp extends React.PureComponent {
 
   initialForm = {
     title: { value: '', isValid: false },
-    startTime: { value: '', isValid: false },
+    startTime: { value: new Date(), isValid: false },
     formErrors: {},
     isFormValid: false,
   };
@@ -146,7 +147,13 @@ class AppointmentApp extends React.PureComponent {
 }
 
 AppointmentApp.propTypes = {
-  appointments: appointmentsPropType,
+  appointments: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      start_time: isoDatetimeStringPropType,
+    }),
+  ),
 };
 
 export default AppointmentApp;

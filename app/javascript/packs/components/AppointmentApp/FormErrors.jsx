@@ -20,7 +20,7 @@ const FormErrors = ({ formErrors }) => {
 };
 
 FormErrors.propTypes = {
-  formErrors: PropTypes.object,
+  formErrors: PropTypes.object.isRequired,
 };
 
 export default FormErrors;

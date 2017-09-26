@@ -1,5 +1,6 @@
 import React from 'react';
-import appointmentsPropType from '../types/appointmentsPropType';
+import PropTypes from 'prop-types';
+import { isoDatetimeStringPropType } from '../propTypes';
 import Appointment from './Appointment';
 
 const AppointmentList = ({ appointments }) => (
@@ -15,7 +16,13 @@ const AppointmentList = ({ appointments }) => (
 );
 
 AppointmentList.propTypes = {
-  appointments: appointmentsPropType,
+  appointments: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      startTime: isoDatetimeStringPropType,
+    }),
+  ),
 };
 
 export default AppointmentList;

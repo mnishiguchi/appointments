@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isoDatetimeStringPropType } from '../propTypes';
 import { formatDateTime } from '../utils';
 
 const Appointment = ({ title, startTime }) => (
@@ -16,8 +17,8 @@ const Appointment = ({ title, startTime }) => (
 );
 
 Appointment.propTypes = {
-  title: PropTypes.string,
-  startTime: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  startTime: isoDatetimeStringPropType,
 };
 
 export default Appointment;

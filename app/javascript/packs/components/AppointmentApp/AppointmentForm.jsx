@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EventEmitter } from 'fbemitter';
 import moment from 'moment';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
@@ -55,10 +56,16 @@ const AppointmentForm = ({ emitter, title, startTime, isFormValid }) => (
 );
 
 AppointmentForm.propTypes = {
-  emitter: PropTypes.object,
-  title: PropTypes.object,
-  startTime: PropTypes.object,
-  isFormValid: PropTypes.bool,
+  emitter: PropTypes.instanceOf(EventEmitter).isRequired,
+  title: PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    isValid: PropTypes.bool.isRequired,
+  }),
+  startTime: PropTypes.shape({
+    value: PropTypes.instanceOf(Date).isRequired,
+    isValid: PropTypes.bool.isRequired,
+  }),
+  isFormValid: PropTypes.bool.isRequired,
 };
 
 export default AppointmentForm;
