@@ -7,6 +7,7 @@ const AppointmentList = ({ appointments }) => (
   <ul className="list-group">
     {appointments.map(appointment => (
       <Appointment
+        id={appointment.id}
         title={appointment.title}
         startTime={appointment.startTime}
         key={appointment.id}

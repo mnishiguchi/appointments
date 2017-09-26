@@ -1,7 +1,14 @@
 class AppointmentsController < ApplicationController
   def index
-    @appointments = Appointment.order(:start_time)
+    # For the list
+    @appointments = Appointment.order(:start_time).select(:id, :title, :start_time)
+
+    # For the form
     @appointment = Appointment.new
+  end
+
+  def show
+    @appointment = Appointment.find(params[:id])
   end
 
   def create

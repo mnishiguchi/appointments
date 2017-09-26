@@ -10,10 +10,13 @@
 // console.log('Hello World from Webpacker')
 
 // https://github.com/renchap/webpacker-react#usage
-import WebpackerReact from 'webpacker-react'
-import AppointmentApp from './components/AppointmentApp'
+import WebpackerReact from 'webpacker-react';
+import AppointmentApp from './components/AppointmentApp';
 
 // Register your root components (those you want to load from your HTML) here.
 WebpackerReact.setup({
-  AppointmentApp
-})
+  AppointmentApp,
+});
+
+// https://github.com/rails/webpacker/issues/336#issuecomment-304107330
+document.addEventListener('turbolinks:before-cache', () => WebpackerReact.unmountComponents());

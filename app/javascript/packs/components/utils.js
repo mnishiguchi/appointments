@@ -2,7 +2,11 @@ import moment from 'moment';
 import humps from 'humps';
 import S from 'string';
 
-export const formatDateTime = dateTime => moment(dateTime).format('MMM Do YYYY, h:mma');
+export const formatDateTime = dateTime =>
+  moment
+    .utc(dateTime)
+    .utcOffset(moment().utcOffset)
+    .format('MMM Do YYYY, h:mma');
 
 export const camelizeKeys = object => humps.camelizeKeys(object);
 export const underscoreKeys = object => humps.decamelizeKeys(object);

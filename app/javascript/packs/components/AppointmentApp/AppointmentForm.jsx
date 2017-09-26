@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EventEmitter } from 'fbemitter';
-import moment from 'moment';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
 const emitOnChange = (emitter, name, value) =>
-  emitter.emit('AppointmentForm:onChange', { name, value });
+  emitter.emit(AppointmentForm.EVENT_ON_CHANGE, { name, value });
 
 const handleInputChange = emitter => e => {
   const { name, value } = e.target;
@@ -21,7 +20,7 @@ const handleDatetimeChange = emitter => moment => {
 };
 
 const emitOnSubmit = emitter => e => {
-  emitter.emit('AppointmentForm:onSubmit');
+  emitter.emit(AppointmentForm.EVENT_ON_SUBMIT);
 };
 
 const AppointmentForm = ({ emitter, title, startTime, isFormValid }) => (
@@ -49,11 +48,14 @@ const AppointmentForm = ({ emitter, title, startTime, isFormValid }) => (
         disabled={!isFormValid}
         onClick={emitOnSubmit(emitter)}
       >
-        Submit
+        Make an appointment
       </button>
     </div>
   </form>
 );
+
+AppointmentForm.EVENT_ON_CHANGE = 'AppointmentForm:onChange';
+AppointmentForm.EVENT_ON_SUBMIT = 'AppointmentForm:onSubmit';
 
 AppointmentForm.propTypes = {
   emitter: PropTypes.instanceOf(EventEmitter).isRequired,

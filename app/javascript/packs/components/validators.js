@@ -1,8 +1,8 @@
 import moment from 'moment';
 
 export function validateMinLength(string, minLength) {
-  if (string.trim().length !== 0 && string.trim().length < minLength) {
-    return `length should be at least ${minLength} characters`;
+  if (string.trim().length < minLength) {
+    return `length must be at least ${minLength} characters`;
   }
 }
 

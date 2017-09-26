@@ -15,7 +15,7 @@ class AppointmentApp extends React.PureComponent {
   static formFieldNames = ['title', 'startTime'];
 
   static validators = {
-    title: [string => validateMinLength(string, 3), string => validateMaxLength(string, 10)],
+    title: [string => validateMinLength(string, 3), string => validateMaxLength(string, 24)],
     startTime: [datetime => validateFutureTime(datetime)],
   };
 
@@ -114,11 +114,11 @@ class AppointmentApp extends React.PureComponent {
   };
 
   subscribeFormEvents() {
-    this.emitter.addListener('AppointmentForm:onChange', ({ name, value }) => {
+    this.emitter.addListener(AppointmentForm.EVENT_ON_CHANGE, ({ name, value }) => {
       this.updateFormField(name, value);
     });
 
-    this.emitter.addListener('AppointmentForm:onSubmit', () => {
+    this.emitter.addListener(AppointmentForm.EVENT_ON_SUBMIT, () => {
       this.submitForm();
     });
   }
