@@ -126,7 +126,7 @@ class AppointmentApp extends React.PureComponent {
   render() {
     const { appointments, title, startTime, formErrors, isFormValid } = this.state;
     return (
-      <div className="AppointmentApp">
+      <div>
         <FormErrors formErrors={formErrors} />
         <div className="row">
           <div className="col-lg-4">

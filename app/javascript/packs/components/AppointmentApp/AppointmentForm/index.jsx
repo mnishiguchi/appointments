@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { EventEmitter } from 'fbemitter';
 import Datetime from 'react-datetime';
-import 'react-datetime/css/react-datetime.css';
+import css from './index.scss';
 
 const emitOnChange = (emitter, name, value) =>
   emitter.emit(AppointmentForm.EVENT_ON_CHANGE, { name, value });
