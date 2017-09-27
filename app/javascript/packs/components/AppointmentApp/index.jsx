@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { EventEmitter } from 'fbemitter';
 import { isoDatetimeStringPropType } from '../propTypes';
-import { getCsrfToken, underscoreKeys, camelizeKeys } from '../utils';
+import {
+  getCsrfToken,
+  underscoreKeys,
+  camelizeKeys,
+  setSuccessPopup,
+  setErrorMessages,
+  closeErrorPopup,
+} from '../utils';
 import { validateMinLength, validateMaxLength, validateFutureTime } from '../validators';
 import AppointmentForm from './AppointmentForm';
 import AppointmentList from './AppointmentList';
-import FormErrors from './FormErrors';
 
 class AppointmentApp extends React.PureComponent {
   // The form object keys and input element names must match the corresponding keys of the remote API.
@@ -38,6 +44,11 @@ class AppointmentApp extends React.PureComponent {
 
   componentDidUpdate(prevProps, prevState) {
     console.log(this.state);
+    if (!this.state.isFormValid) {
+      setErrorMessages(this.state.formErrors);
+    } else {
+      closeErrorPopup();
+    }
   }
 
   componentWillUnmount() {
@@ -93,6 +104,7 @@ class AppointmentApp extends React.PureComponent {
         const newAppointment = response.data;
         this.addAppointment(newAppointment);
         this.clearFormValues();
+        setSuccessPopup('Success!');
       })
       .catch(error => {
         const formErrors = error.response.data;
@@ -127,7 +139,6 @@ class AppointmentApp extends React.PureComponent {
     const { appointments, title, startTime, formErrors, isFormValid } = this.state;
     return (
       <div>
-        <FormErrors formErrors={formErrors} />
         <div className="row">
           <div className="col-lg-4">
             <AppointmentForm
